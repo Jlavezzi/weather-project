@@ -1,43 +1,47 @@
+//dependencies config
 const express = require('express');
-
-const https = require('https')
-
+const https = require('https');
 const bodyParser = require('body-parser');
-
+// const mongoose = require('mongoose')
 const app = express();
-
+const weatherD = [];
+app.use(express.static('public'));
+app.set('view engine', 'ejs')
 app.use(bodyParser.urlencoded({extended:true}))
 
+//root route
 app.get('/', function(req, res){
 
-res.sendFile(__dirname +'/index.html')
+//render weatherdetails
+res.render('Index', {Weatherdetails:weatherD} )
 });
 
+// post from root route
 app.post('/' , function(req, res){
+  // passing data from client side
   var cityName = req.body.cityName;
+    const query = cityName
 
-  const query = cityName
   const units = 'metric'
   const apiKey ='3117d90ffe45ff5ac454f8a9eda5d3b9'
+//fetching weather details from openweathermap server
 
   const url = 'https://api.openweathermap.org/data/2.5/weather?q='+ query +'&units='+ units +'&appid='+ apiKey;
   https.get( url , function(response){
     response.on('data', function(data){
       const weatherData= JSON.parse(data);
-      const temp = weatherData.main.temp;
-      const weatherDescription = weatherData.weather[0].description;
       const icon = weatherData.weather[0].icon;
-      const imgUrl ='http://openweathermap.org/img/wn/'+ icon +'@2x.png'
-
-      res.write('<h1>the temperature in' + query + ' is' + temp +'</h1>');
-      res.write(weatherDescription);
-      res.write('<img src =' +imgUrl + '>');
-      res.send()
+      const arrOfObj = {
+        location: cityName,
+        temp:  weatherData.main.temp +'c',
+        weatherDescription: weatherData.weather[0].description,
+        imgUrl: 'http://openweathermap.org/img/wn/'+ icon +'@2x.png'
+      }
+       weatherD.push(arrOfObj)
+      res.redirect('/')
     })
   })
 
-
-  console.log(cityName)
 })
 
 

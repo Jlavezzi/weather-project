@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>WeatherData</title>
+  </head>
+  <body>
+
+    <div class="card">
+      <%Weatherdetails.forEach((i)=>{%>
+        <h1><%=i.location%></h1>
+
+
+        <img src="<%= i.imgUrl%>" alt="">
+
+
+               <p> <%=i.temp%></p>
+
+               <p><%=i.weatherDescription%></p>
+
+
+    <%});%>
+
+
+
+             <form class="" action='/' method="post">
+               <input type="text" name="cityName" value="" placeholder="Search Location">
+<br>
+               <button type="submit" > Fetch Weather Data ...</button>
+             </form>
+    </div>
+
+
+
+
+
+  </body>
+</html>
